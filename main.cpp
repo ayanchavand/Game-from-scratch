@@ -8,7 +8,15 @@ int main()
     sf::RenderWindow window(sf::VideoMode(1920, 1080), "Game",sf::Style::Default, settings);
     
     sf::Clock clock;
+    sf::Font font;
+    if (!font.loadFromFile("font.ttf")) {
+        std::cout << "Could not load fonts!" << std::endl;
 
+    }
+    sf::Text score;
+    score.setFont(font);
+    score.setCharacterSize(10);
+    score.setFillColor(sf::Color::White);
     sf::Vector2f ballVel(1, 1);
 
     sf::CircleShape ball(10);
@@ -18,7 +26,9 @@ int main()
 
    // run the program as long as the window is open
     while (window.isOpen())
-    {
+    {   
+        
+        score.setString(std::to_string(clock.getElapsedTime().asSeconds()));
         // check all the window's events that were triggered since the last iteration of the loop
         sf::Event event;
         while (window.pollEvent(event))
@@ -32,6 +42,7 @@ int main()
 
         //ALl the Draw calls here
         window.draw(ball);
+        window.draw(score);
         ball.move(ballVel);
         if (ball.getPosition().y <= 0 || ball.getPosition().y >= 1080) {
             ballVel.y = -ballVel.y;
@@ -39,6 +50,7 @@ int main()
         if (ball.getPosition().x <= 0 || ball.getPosition().x >= 1920) {
             ballVel.x = -ballVel.x;
         }
+
         window.display();
     }
     std::cout << clock.restart().asSeconds();
